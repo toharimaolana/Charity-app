@@ -9,9 +9,9 @@
 	let campaigns = $state([
 		{
 			id: 1,
-			title: 'Education for Underprivileged Children',
-			description: 'Help provide quality education and learning materials for children in remote areas.',
-			image: 'https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Education',
+			title: 'Help Gaza',
+			description: 'Help provide quality education and learning materials for children in Gaza.',
+			image: '/images/campaign1.jpg',
 			raised: 15000000,
 			target: 30000000,
 			donors: 234,
@@ -19,34 +19,14 @@
 		},
 		{
 			id: 2,
-			title: 'Clean Water for Rural Communities',
-			description: 'Build water wells and sanitation facilities for communities without access to clean water.',
-			image: 'https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Clean+Water',
+			title: 'Education for Sudan Children',
+			description: 'Support underprivileged children with access to education and school supplies.',
+			image: '/images/campaign2.jpg',
 			raised: 22000000,
 			target: 40000000,
 			donors: 456,
 			daysLeft: 22
 		},
-		{
-			id: 3,
-			title: 'Medical Aid for Emergency Relief',
-			description: 'Provide medical supplies and healthcare services to disaster-affected areas.',
-			image: 'https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Medical+Aid',
-			raised: 35000000,
-			target: 50000000,
-			donors: 789,
-			daysLeft: 8
-		},
-		{
-			id: 4,
-			title: 'Food Security Program',
-			description: 'Distribute nutritious meals and food packages to families in need.',
-			image: 'https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Food+Security',
-			raised: 18000000,
-			target: 25000000,
-			donors: 345,
-			daysLeft: 30
-		}
 	]);
 
 	// Computed percentage for progress bars
