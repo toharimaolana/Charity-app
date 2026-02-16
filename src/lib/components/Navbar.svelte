@@ -34,7 +34,7 @@
     <!-- Desktop Menu -->
     <div class="hidden md:flex items-center space-x-6">
       <a href="/" class="text-gray-600 hover:text-violet-accent transition duration-300">Home</a>
-      <a href="/about" class="text-gray-600 hover:text-violet-accent transition duration-300">About</a>
+      <a href="/campaign" class="text-gray-600 hover:text-violet-accent transition duration-300">Campaign</a>
       <a href="/community" class="text-gray-600 hover:text-violet-accent transition duration-300">Community</a>
       <button class="bg-violet-accent text-gray-800 px-6 py-2 rounded-full hover:bg-violet-700 transition duration-300 shadow-md">Donasi Sekarang</button>
     </div>
@@ -53,7 +53,7 @@
   {#if showMobileMenu}
     <div transition:slide={{ duration: 300, easing: quintOut }} class="md:hidden bg-white shadow-lg py-2">
       <a href="/" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Home</a>
-      <a href="/about" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">About</a>
+      <a href="/campaign" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Campaign</a>
       <a href="/community" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Community</a>
       <div class="px-4 py-2">
         <button class="w-full bg-violet-accent text-gray-800 px-6 py-2 rounded-full hover:bg-violet-700 transition duration-300 shadow-md">Donasi Sekarang</button>
