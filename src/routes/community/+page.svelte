@@ -1,6 +1,4 @@
 <script>
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Footer from '$lib/components/Footer.svelte';
 	import HeroCommunity from '$lib/components/community/HeroCommunity.svelte';
 	import CommunityBenefits from '$lib/components/community/CommunityBenefits.svelte';
 	import ActivitiesList from '$lib/components/community/ActivitiesList.svelte';
@@ -11,12 +9,11 @@
 </script>
 
 <svelte:head>
-	<title>Join Our Community - Connect, Share, Make Impact | Charity Platform</title>
-	<meta name="description" content="Join thousands of changemakers in our vibrant community. Participate in events, share experiences, and amplify your impact together." />
+	<title>Komunitas & Relawan — PeduliBersama</title>
+	<meta name="description" content="Bergabunglah bersama ribuan relawan dan agen kebaikan dalam gerakan sosial transparan PeduliBersama." />
 </svelte:head>
 
-<div class="min-h-screen bg-white">
-	<Navbar />
+<div>
 	<HeroCommunity />
 	<CommunityBenefits />
 	<ActivitiesList />
@@ -24,5 +21,5 @@
 	<Testimonials />
 	<CommunityStats />
 	<JoinCTA />
-	<Footer />
 </div>
+

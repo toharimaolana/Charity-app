@@ -1,19 +1,22 @@
 <script>
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
 	import { campaigns, getCampaignBySlug } from '$lib/data/campaigns.js';
 
 	let selectedCampaign = $state(null);
-	let amount = $state(100000);
+	let donationAmount = $state(100000);
+	let customAmount = $state('');
 	let donorName = $state('');
 	let donorEmail = $state('');
 	let isCreatingPayment = $state(false);
 
+	const presets = [50000, 100000, 250000, 500000];
+
+	let activeAmount = $derived(customAmount ? Number(customAmount) : donationAmount);
+
 	// Ambil campaign berdasarkan slug di URL
 	$effect(() => {
 		const slug = $page.params.slug;
-		selectedCampaign = getCampaignBySlug(slug) ?? campaigns[0];
+		selectedCampaign = getCampaignBySlug ? getCampaignBySlug(slug) ?? campaigns[0] : campaigns[0];
 	});
 
 	// Hitung progress
@@ -32,14 +35,16 @@
 			style: 'currency',
 			currency: 'IDR',
 			minimumFractionDigits: 0
-		}).format(value);
+		}).format(value || 0);
 	}
 
 	// Handle donate (call API Xendit)
 	async function handleDonate() {
 		if (!selectedCampaign) return;
 
-		if (!amount || amount < 10000) {
+		const finalAmount = activeAmount;
+
+		if (!finalAmount || finalAmount < 10000) {
 			alert('Minimal donasi adalah Rp 10.000');
 			return;
 		}
@@ -56,7 +61,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					amount,
+					amount: finalAmount,
 					campaignSlug: selectedCampaign.slug,
 					campaignTitle: selectedCampaign.title,
 					donorName: donorName || 'Anonymous',
@@ -65,7 +70,6 @@
 			});
 
 			const data = await response.json();
-			console.log('📥 Response from server:', data);
 
 			if (!response.ok) {
 				let msg = data.error || 'Gagal membuat invoice';
@@ -77,7 +81,6 @@
 				throw new Error('Invoice URL tidak ditemukan');
 			}
 
-			// Redirect ke hosted payment page Xendit
 			window.location.href = data.invoiceUrl;
 		} catch (error) {
 			console.error('❌ Error:', error);
@@ -89,164 +92,86 @@
 </script>
 
 <svelte:head>
-	<title>{selectedCampaign ? selectedCampaign.title : 'Campaign'} | Charity Platform</title>
+	<title>{selectedCampaign ? selectedCampaign.title : 'Kampanye'} — PeduliBersama</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
-	<Navbar />
-
+<div class="py-10 bg-[#F1F0F1] min-h-screen font-sans">
 	{#if selectedCampaign}
-		<!-- Hero + main content -->
-		<section class="pt-24 pb-16 px-4">
-			<div class="max-w-7xl mx-auto">
+		<!-- Main content -->
+		<section class="px-4">
+			<div class="max-w-7xl mx-auto space-y-6">
 				<!-- Breadcrumb -->
-				<div class="flex items-center gap-2 text-sm text-gray-600 mb-6">
-					<a href="/" class="hover:text-purple-600">Home</a>
+				<div class="flex items-center gap-2 text-xs font-mono font-semibold text-[#0D150F]/70">
+					<a href="/" class="hover:text-[#0E6A36]">BERANDA</a>
 					<span>/</span>
-					<a href="/campaign" class="hover:text-purple-600">Campaign</a>
+					<a href="/campaigns" class="hover:text-[#0E6A36]">KAMPANYE</a>
 					<span>/</span>
-					<span class="text-gray-900 font-medium line-clamp-1">
+					<span class="text-[#0D150F] font-medium truncate max-w-xs">
 						{selectedCampaign.title}
 					</span>
 				</div>
 
-				<div class="grid lg:grid-cols-3 gap-10">
+				<div class="grid lg:grid-cols-3 gap-8 items-start">
 					<!-- Left: Image + description -->
-					<div class="lg:col-span-2 space-y-8">
+					<div class="lg:col-span-2 space-y-6">
 						<!-- Image -->
-						<div class="relative rounded-2xl overflow-hidden shadow-2xl group">
+						<div class="relative rounded-2xl overflow-hidden shadow-[0_4px_20px_-2px_rgba(14,106,54,0.05)] border border-[#B5B3A9]/30 h-80 sm:h-96 bg-slate-900">
 							<img
 								src={selectedCampaign.image}
 								alt={selectedCampaign.title}
-								class="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+								class="w-full h-full object-cover"
 							/>
-							<!-- Category badge -->
-							<div
-								class="absolute top-4 left-4 px-4 py-2 rounded-full bg-white/95 text-purple-600 font-semibold text-sm shadow"
-							>
-								{selectedCampaign.category}
+							<div class="absolute top-4 left-4 font-mono text-xs font-bold px-3.5 py-1 rounded-lg bg-white/95 text-[#0E6A36] uppercase tracking-wider shadow-xs">
+								{selectedCampaign.category || 'Kemanusiaan'}
 							</div>
-							<!-- Days left badge -->
-							<div
-								class="absolute top-4 right-4 px-4 py-2 rounded-full bg-white/95 text-orange-600 font-semibold text-sm shadow"
-							>
-								{selectedCampaign.daysLeft} days left
+							<div class="absolute top-4 right-4 font-mono text-xs font-bold px-3.5 py-1 rounded-lg bg-[#BE123C] text-white uppercase tracking-wider shadow-xs">
+								⏳ {selectedCampaign.daysLeft || 14} HARI LAGI
 							</div>
 						</div>
 
 						<!-- Title + meta -->
-						<div>
-							<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+						<div class="space-y-3">
+							<h1 class="font-extrabold text-2xl sm:text-4xl text-[#0D150F] leading-tight">
 								{selectedCampaign.title}
 							</h1>
-							<p class="text-lg text-gray-700 mb-6">
-								{selectedCampaign.shortDescription}
+							<p class="text-[#0D150F]/80 text-sm sm:text-base font-medium leading-relaxed">
+								{selectedCampaign.description}
 							</p>
-
-							<div class="flex flex-wrap gap-4 text-sm">
-								<div class="flex items-center gap-2 text-gray-600">
-									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-										/>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-										/>
-									</svg>
-									<span>{selectedCampaign.location}</span>
-								</div>
-
-								<div class="flex items-center gap-2 text-gray-600">
-									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-										/>
-									</svg>
-									<span>{selectedCampaign.donors.toLocaleString()} donors</span>
-								</div>
-							</div>
 						</div>
 
-						<!-- About / Highlights / Usage -->
-						<div class="bg-white rounded-2xl p-8 shadow border border-gray-100 space-y-6">
-							<div>
-								<h2 class="text-xl font-bold text-gray-900 mb-3">About This Campaign</h2>
-								<p class="text-gray-700 leading-relaxed">
-									{selectedCampaign.longDescription}
-								</p>
-							</div>
-
-							<div>
-								<h3 class="text-lg font-semibold text-gray-900 mb-3">
-									Impact Highlights
-								</h3>
-								<ul class="space-y-2 text-gray-700">
-									{#each selectedCampaign.highlights as highlight}
-										<li class="flex gap-2">
-											<span class="text-purple-600 mt-1">•</span>
-											<span>{highlight}</span>
-										</li>
-									{/each}
-								</ul>
-							</div>
-
-							<div>
-								<h3 class="text-lg font-semibold text-gray-900 mb-3">
-									How Your Donation is Used
-								</h3>
-								<div class="space-y-4">
-									{#each selectedCampaign.usageBreakdown as item}
-										<div>
-											<div class="flex justify-between text-sm mb-1">
-												<span class="font-medium text-gray-800">{item.label}</span>
-												<span class="text-purple-600 font-semibold">
-													{item.percent}%
-												</span>
-											</div>
-											<div class="w-full bg-gray-200 rounded-full h-2">
-												<div
-													class="h-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600"
-													style={`width: ${item.percent}%`}
-												/>
-											</div>
-										</div>
-									{/each}
-								</div>
+						<!-- Usage -->
+						<div class="bg-white rounded-xl p-6 sm:p-8 space-y-4 border border-[#B5B3A9]/30 shadow-[0_4px_20px_-2px_rgba(14,106,54,0.05)]">
+							<h3 class="font-bold text-xl text-[#0D150F]">
+								Transparansi Penggunaan Dana
+							</h3>
+							<p class="text-[#0D150F]/70 text-xs font-medium leading-relaxed">
+								Setiap rupiah yang disalurkan dicatat pada ledger publik dan dialokasikan 100% langsung untuk bantuan lapangan tanpa potongan tersembunyi.
+							</p>
+							<div class="w-full bg-[#F1F0F1] rounded-full h-2.5 overflow-hidden p-0.5 border border-[#B5B3A9]/30">
+								<div
+									class="h-full rounded-full bg-[#0E6A36] transition-all duration-700"
+									style={`width: ${progressPercent}%`}
+								></div>
 							</div>
 						</div>
 					</div>
 
 					<!-- Right: Donation card -->
 					<div class="lg:sticky lg:top-24 h-fit">
-						<div class="bg-white rounded-2xl p-8 shadow-xl border border-purple-100">
+						<div class="bg-white rounded-xl p-6 sm:p-8 space-y-6 shadow-[0_4px_20px_-2px_rgba(14,106,54,0.05)] border border-[#B5B3A9]/30">
 							<!-- Progress -->
-							<div class="mb-6">
-								<div class="flex justify-between items-end mb-2">
-									<span class="text-2xl font-bold text-gray-900">
+							<div class="space-y-2">
+								<span class="text-xs text-[#0D150F]/60 font-mono font-bold uppercase tracking-wider block">DANA TERKUMPUL:</span>
+								<div class="flex justify-between items-baseline">
+									<span class="font-mono font-black text-2xl text-[#0D150F]">
 										{formatIDR(selectedCampaign.raised)}
 									</span>
-									<span class="text-xs text-gray-600">
-										of {formatIDR(selectedCampaign.target)}
+									<span class="font-mono font-bold text-[#0E6A36] bg-[#6FC052]/15 px-2 py-0.5 rounded-md border border-[#6FC052]/30 text-xs">
+										{progressPercent}%
 									</span>
 								</div>
-								<div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden mb-2">
-									<div
-										class="h-3 rounded-full bg-gradient-to-r from-purple-600 to-pink-600"
-										style={`width: ${progressPercent}%`}
-									/>
-								</div>
-								<p class="text-sm text-gray-600">
-									<span class="font-semibold text-purple-600">{progressPercent}%</span>
-									&nbsp;funded
+								<p class="text-xs text-[#0D150F]/70 font-medium">
+									dari target <strong class="font-mono text-[#0D150F]">{formatIDR(selectedCampaign.target)}</strong>
 								</p>
 							</div>
 
@@ -256,150 +181,99 @@
 									e.preventDefault();
 									handleDonate();
 								}}
-								class="space-y-4"
+								class="space-y-4 pt-4 border-t border-[#B5B3A9]/20"
 							>
 								<div>
-									<label class="block text-sm font-semibold text-gray-700 mb-2">
-										Donation Amount (IDR)
-									</label>
-									<input
-										type="number"
-										min="10000"
-										step="1000"
-										bind:value={amount}
-										required
-										class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-purple-600 text-lg font-semibold"
-										placeholder="100000"
-									/>
-								</div>
+									<div class="flex items-center justify-between mb-2">
+										<label for="input-amount" class="block text-xs font-mono font-bold text-[#0E6A36] uppercase tracking-wider">
+											PILIH NOMINAL DONASI
+										</label>
+										<span class="font-mono text-xs font-bold text-[#0D150F]">{formatIDR(activeAmount)}</span>
+									</div>
 
-								<div class="grid grid-cols-2 gap-2">
-									{#each [50000, 100000, 250000, 500000] as preset}
-										<button
-											type="button"
-											class={`px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all ${
-												amount == preset
-													? 'bg-purple-600 text-white border-purple-600'
-													: 'bg-white text-gray-700 border-gray-200 hover:border-purple-400'
-											}`}
-											onclick={() => (amount = preset)}
-										>
-											{formatIDR(preset)}
-										</button>
-									{/each}
+									<div class="grid grid-cols-2 gap-2 mb-3">
+										{#each presets as preset}
+											<button
+												type="button"
+												class="py-2.5 px-3 text-xs font-mono font-bold rounded-xl border transition-all text-center {donationAmount === preset && !customAmount ? 'bg-[#0E6A36] text-white border-[#0E6A36] shadow-sm font-extrabold scale-105' : 'bg-[#F1F0F1] text-[#0D150F] border-[#B5B3A9]/40 hover:bg-white'}"
+												onclick={() => { donationAmount = preset; customAmount = ''; }}
+											>
+												{formatIDR(preset)}
+											</button>
+										{/each}
+									</div>
+
+									<div class="relative">
+										<span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-mono font-bold text-[#0E6A36]">Rp</span>
+										<input 
+											type="number" 
+											placeholder="Atau ketik nominal kustom..." 
+											bind:value={customAmount}
+											min="10000"
+											class="w-full pl-9 pr-3 py-2.5 bg-[#F1F0F1] border border-[#B5B3A9]/40 rounded-xl text-xs font-mono font-bold text-[#0D150F] focus:outline-none focus:border-[#0E6A36]"
+										/>
+									</div>
 								</div>
 
 								<div>
-									<label class="block text-sm font-semibold text-gray-700 mb-2">
-										Your Name <span class="text-gray-400 font-normal">(optional)</span>
+									<label for="input-donor-name" class="block text-xs font-mono font-bold text-[#0D150F]/70 uppercase tracking-wider mb-1">
+										NAMA DONATUR <span class="text-[#0D150F]/40 font-normal">(OPSIONAL)</span>
 									</label>
 									<input
+										id="input-donor-name"
 										type="text"
 										bind:value={donorName}
-										class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-purple-600"
-										placeholder="Anonymous"
+										class="w-full px-4 py-2.5 bg-[#F1F0F1] border border-[#B5B3A9]/30 rounded-xl text-xs font-medium text-[#0D150F] focus:outline-none focus:border-[#0E6A36]"
+										placeholder="Hamba Allah / Anonim"
 									/>
 								</div>
 
 								<div>
-									<label class="block text-sm font-semibold text-gray-700 mb-2">
-										Email Address <span class="text-red-500">*</span>
+									<label for="input-donor-email" class="block text-xs font-mono font-bold text-[#0D150F]/70 uppercase tracking-wider mb-1">
+										ALAMAT EMAIL <span class="text-[#BE123C]">*</span>
 									</label>
 									<input
+										id="input-donor-email"
 										type="email"
 										bind:value={donorEmail}
 										required
-										class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-purple-600"
-										placeholder="you@example.com"
+										class="w-full px-4 py-2.5 bg-[#F1F0F1] border border-[#B5B3A9]/30 rounded-xl text-xs font-medium text-[#0D150F] focus:outline-none focus:border-[#0E6A36]"
+										placeholder="nama@email.com"
 									/>
 								</div>
 
 								<button
 									type="submit"
 									disabled={isCreatingPayment}
-									class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+									class="w-full py-4 bg-[#0E6A36] hover:bg-[#0B542B] text-white font-bold text-xs rounded-xl shadow-sm uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 								>
 									{#if isCreatingPayment}
-										<span class="flex items-center justify-center gap-2">
-											<svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-												<circle
-													class="opacity-25"
-													cx="12"
-													cy="12"
-													r="10"
-													stroke="currentColor"
-													stroke-width="4"
-												></circle>
-												<path
-													class="opacity-75"
-													fill="currentColor"
-													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-												></path>
-											</svg>
-											Creating payment link...
-										</span>
+										<span class="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
+										<span>Menghubungkan Xendit...</span>
 									{:else}
-										Donate Now
+										<span>Salurkan Donasi {formatIDR(activeAmount)} via Xendit →</span>
 									{/if}
 								</button>
-
-								<p class="text-xs text-gray-500 pt-1">
-									Payments are processed securely via Xendit. You can pay using bank transfer,
-									e-wallet, virtual account, and more.
-								</p>
 							</form>
-
-							<!-- Organizer info -->
-							<div class="mt-6 pt-6 border-t border-gray-200">
-								<div class="flex items-start gap-3">
-									<div
-										class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-lg"
-									>
-										{selectedCampaign.organizer.name.charAt(0)}
-									</div>
-									<div class="flex-1">
-										<div class="flex items-center gap-2">
-											<h4 class="font-bold text-gray-900">
-												{selectedCampaign.organizer.name}
-											</h4>
-											{#if selectedCampaign.organizer.verified}
-												<svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-													<path
-														fill-rule="evenodd"
-														d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-														clip-rule="evenodd"
-													/>
-												</svg>
-											{/if}
-										</div>
-										<p class="text-xs text-gray-600">
-											{selectedCampaign.organizer.totalCampaigns} campaigns •
-											&nbsp;{formatIDR(selectedCampaign.organizer.totalRaised)} raised
-										</p>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 	{:else}
-		<section class="pt-32 pb-20 px-4">
-			<div class="max-w-3xl mx-auto text-center">
-				<h1 class="text-3xl font-bold text-gray-900 mb-4">Campaign not found</h1>
-				<p class="text-gray-600 mb-6">
-					The campaign you are looking for does not exist or may have been removed.
+		<section class="py-20 px-4">
+			<div class="max-w-3xl mx-auto text-center bg-white p-10 rounded-xl border border-[#B5B3A9]/30 shadow-[0_4px_20px_-2px_rgba(14,106,54,0.05)] space-y-4">
+				<h1 class="font-bold text-2xl text-[#0D150F]">Kampanye Tidak Ditemukan</h1>
+				<p class="text-[#0D150F]/70 text-xs font-medium">
+					Kampanye yang Anda cari tidak tersedia atau telah berakhir.
 				</p>
 				<a
-					href="/campaign"
-					class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+					href="/campaigns"
+					class="inline-block px-6 py-3 bg-[#0E6A36] text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-[#0B542B] transition-all"
 				>
-					Back to All Campaigns
+					Kembali ke Daftar Kampanye
 				</a>
 			</div>
 		</section>
 	{/if}
-
-	<Footer />
 </div>

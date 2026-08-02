@@ -1,48 +1,28 @@
 <script>
-	let partners = [
-		{ name: 'UNICEF', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=UNICEF' },
-		{ name: 'Red Cross', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=Red+Cross' },
-		{ name: 'WHO', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=WHO' },
-		{ name: 'Save the Children', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=STC' },
-		{ name: 'WWF', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=WWF' },
-		{ name: 'Oxfam', logo: 'https://via.placeholder.com/200x80/6b7280/ffffff?text=Oxfam' }
+	const partners = [
+		'Palang Merah Indonesia',
+		'Badan Zakat Nasional',
+		'Yayasan KitaBisa',
+		'Relawan Nusantara',
+		'Bank Syariah Indonesia',
+		'Wahana Visi Indonesia'
 	];
 </script>
 
-<section class="py-20 px-4 bg-gray-50">
-	<div class="max-w-7xl mx-auto">
-		<!-- Header -->
-		<div class="text-center mb-16">
-			<h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-				Trusted by Leading Organizations
-			</h2>
-			<p class="text-gray-600 max-w-2xl mx-auto">
-				Proud to partner with NGOs and foundations making a global impact
-			</p>
+<section class="py-14 bg-[#F1F0F1] border-b border-[#B5B3A9]/30 font-sans">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+		<div class="text-center">
+			<span class="font-mono text-xs font-bold text-[#0E6A36] uppercase tracking-widest block">
+				MITRA KOLABORASI & AUDITOR INDEPENDEN
+			</span>
 		</div>
 
-		<!-- Logos Grid -->
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+		<div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
 			{#each partners as partner}
-				<div class="flex items-center justify-center p-6 bg-white rounded-xl hover:shadow-lg transition-shadow duration-300 grayscale hover:grayscale-0">
-					<img 
-						src={partner.logo} 
-						alt={partner.name}
-						class="max-w-full h-auto opacity-60 hover:opacity-100 transition-opacity"
-					/>
+				<div class="px-5 py-2.5 rounded-xl bg-white border border-[#B5B3A9]/30 font-mono text-xs font-bold text-[#0D150F] shadow-2xs">
+					{partner}
 				</div>
 			{/each}
-		</div>
-
-		<!-- CTA -->
-		<div class="text-center mt-12">
-			<p class="text-gray-700 mb-4 font-medium">Interested in partnering with us?</p>
-			<a 
-				href="/contact"
-				class="inline-block px-8 py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors duration-200"
-			>
-				Get in Touch
-			</a>
 		</div>
 	</div>
 </section>

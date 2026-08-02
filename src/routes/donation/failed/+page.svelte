@@ -4,52 +4,47 @@
 </script>
 
 <svelte:head>
-	<title>Payment Pending | Charity Platform</title>
+	<title>Pembayaran Pending — PeduliBersama</title>
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-[#F1F0F1] font-sans flex flex-col justify-between">
 	<Navbar />
 
-	<section class="pt-32 pb-20 px-4">
-		<div class="max-w-2xl mx-auto text-center">
+	<section class="py-20 px-4">
+		<div class="max-w-xl mx-auto text-center space-y-6">
 			<!-- Warning Icon -->
-			<div class="inline-flex items-center justify-center w-24 h-24 bg-yellow-100 rounded-full mb-8">
-				<svg class="w-12 h-12 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-					/>
-				</svg>
+			<div class="inline-flex items-center justify-center w-20 h-20 bg-amber-100 text-amber-600 rounded-full border border-amber-300 text-3xl mx-auto shadow-sm">
+				⏳
 			</div>
 
-			<h1 class="text-4xl font-bold text-gray-900 mb-4">Payment Incomplete</h1>
-			<p class="text-lg text-gray-600 mb-8">
-				Your payment was not completed. This could happen if the payment was cancelled or expired.
-			</p>
+			<div class="space-y-2">
+				<h1 class="text-3xl font-extrabold text-[#0D150F] tracking-tight">Pembayaran Belum Selesai</h1>
+				<p class="text-sm text-[#0D150F]/70 font-medium max-w-md mx-auto">
+					Transaksi pembayaran Anda belum terselesaikan atau batas waktu invoice telah berakhir.
+				</p>
+			</div>
 
-			<div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 mb-8">
-				<p class="text-gray-700 mb-4">Don't worry! You can try again anytime.</p>
-				<ul class="text-left text-sm text-gray-600 space-y-2">
-					<li>• Check your email for payment instructions if you chose bank transfer</li>
-					<li>• Payment links are valid for 24 hours</li>
-					<li>• Contact us if you need help</li>
+			<div class="bg-white rounded-xl p-6 border border-[#B5B3A9]/30 shadow-[0_4px_20px_-2px_rgba(14,106,54,0.05)] text-left space-y-3 text-xs text-[#0D150F]/80">
+				<p class="font-bold text-[#0D150F]">Petunjuk Pembayaran Xendit:</p>
+				<ul class="space-y-1.5 font-medium text-[#0D150F]/70">
+					<li>• Periksa email Anda untuk instruksi kode Virtual Account / QRIS</li>
+					<li>• Batas waktu pembayaran invoice Xendit berlaku selama 24 jam</li>
+					<li>• Anda dapat mengulang transaksi kapan saja</li>
 				</ul>
 			</div>
 
-			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+			<div class="flex flex-col sm:flex-row gap-3 justify-center">
 				<a
 					href="/campaigns"
-					class="px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors"
+					class="bg-[#0E6A36] hover:bg-[#0B542B] text-white font-bold text-xs py-3.5 px-6 rounded-xl shadow-sm uppercase tracking-wider transition-all"
 				>
-					Try Again
+					Coba Lagi →
 				</a>
 				<a
 					href="/"
-					class="px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 font-semibold rounded-lg hover:border-purple-600 transition-colors"
+					class="bg-white hover:bg-white/80 text-[#0D150F] font-bold text-xs py-3.5 px-6 rounded-xl border border-[#B5B3A9]/30 uppercase tracking-wider transition-all"
 				>
-					Back to Home
+					Kembali ke Beranda
 				</a>
 			</div>
 		</div>

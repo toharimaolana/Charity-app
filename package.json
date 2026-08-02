@@ -29,5 +29,8 @@
 		"svelte": "^5.48.2",
 		"tailwindcss": "^4.1.18",
 		"vite": "^7.3.1"
+	},
+	"dependencies": {
+		"motion": "^12.43.0"
 	}
 }

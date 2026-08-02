@@ -1,62 +1,38 @@
-<section class="py-20 px-4 bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 relative overflow-hidden">
-	<!-- Decorative Elements -->
-	<div class="absolute inset-0">
-		<div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-		<div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-300/10 rounded-full blur-3xl"></div>
-	</div>
+<script>
+	// CTASection - Modern Crowdfund System
+</script>
 
-	<div class="relative max-w-4xl mx-auto text-center">
-		<!-- Icon -->
-		<div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-8">
-			<svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-				<path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
-			</svg>
-		</div>
-
-		<!-- Heading -->
-		<h2 class="text-3xl md:text-5xl font-bold text-white mb-6">
-			Ready to Make a Difference?
-		</h2>
-		<p class="text-xl text-purple-100 mb-10 leading-relaxed">
-			Join our community of passionate givers and help us create lasting change in communities around the world. Every contribution matters.
-		</p>
-
-		<!-- Buttons -->
-		<div class="flex flex-col sm:flex-row gap-4 justify-center">
-			<a 
-				href="/campaigns"
-				class="px-10 py-4 bg-white text-violet-600 font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-2xl hover:shadow-3xl hover:-translate-y-1 text-lg"
-			>
-				Browse Campaigns
-			</a>
-			<a 
-				href="/donate"
-				class="px-10 py-4 bg-white/10 backdrop-blur-sm text-white font-bold rounded-lg border-2 border-white hover:bg-white/20 transition-all duration-200 text-lg"
-			>
-				Start Donating
-			</a>
-		</div>
-
-		<!-- Extra Info -->
-		<div class="mt-12 flex items-center justify-center gap-8 text-purple-100">
-			<div class="flex items-center gap-2">
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-					<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-				</svg>
-				<span class="text-sm">100% Secure</span>
+<section class="py-16 sm:py-20 bg-[#F1F0F1] font-sans">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="bg-[#0D150F] rounded-3xl p-8 sm:p-14 text-white shadow-xl border border-[#0E6A36]/40 flex flex-col md:flex-row items-center justify-between gap-8">
+			
+			<div class="max-w-xl space-y-3">
+				<span class="font-mono bg-[#6FC052]/15 text-[#6FC052] border border-[#6FC052]/30 font-bold text-xs px-3.5 py-1 rounded-full uppercase tracking-widest inline-block">
+					BERGABUNG DENGAN GERAKAN
+				</span>
+				<h2 class="font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+					Siap Menjadi Bagian dari Perubahan?
+				</h2>
+				<p class="text-slate-300 text-sm leading-relaxed font-medium">
+					Mulai dari donasi kecil hingga menjadi relawan lapangan, setiap aksi kepedulian Anda memberi dampak besar bagi mereka yang membutuhkan.
+				</p>
 			</div>
-			<div class="flex items-center gap-2">
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-					<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-				</svg>
-				<span class="text-sm">Transparent</span>
+
+			<div class="flex flex-col sm:flex-row gap-3 whitespace-nowrap">
+				<a 
+					href="/campaigns" 
+					class="bg-[#0E6A36] hover:bg-[#0B542B] text-white font-bold text-xs py-4 px-8 rounded-xl shadow-md uppercase tracking-wider text-center transition-all"
+				>
+					Mulai Salurkan Donasi →
+				</a>
+				<a 
+					href="/community" 
+					class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs py-4 px-6 rounded-xl border border-white/20 uppercase tracking-wider text-center transition-all"
+				>
+					Gabung Komunitas Relawan
+				</a>
 			</div>
-			<div class="flex items-center gap-2">
-				<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-					<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-				</svg>
-				<span class="text-sm">Impactful</span>
-			</div>
+
 		</div>
 	</div>
 </section>

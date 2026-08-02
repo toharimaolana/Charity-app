@@ -1,9 +1,15 @@
 <script>
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
-{@render children()}
+<div class="min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-white bg-[#FAF8F5]">
+	<Navbar />
+	<main class="flex-grow">
+		{@render children()}
+	</main>
+	<Footer />
+</div>
