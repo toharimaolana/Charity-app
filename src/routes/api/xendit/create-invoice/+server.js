@@ -1,13 +1,14 @@
 import { json } from '@sveltejs/kit';
-import { XENDIT_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export async function POST({ request, url }) {
 	try {
 		console.log('=== XENDIT CREATE INVOICE (REST API) ===');
+		const apiKey = env.XENDIT_API_KEY;
 
 		// Check API key
-		if (!XENDIT_API_KEY) {
-			console.error('❌ API Key not found');
+		if (!apiKey) {
+			console.error('❌ API Key not found in environment');
 			return json({ error: 'API Key tidak tersedia' }, { status: 500 });
 		}
 
@@ -62,7 +63,7 @@ export async function POST({ request, url }) {
 		console.log('📤 Sending to Xendit API...');
 
 		// Create Basic Auth header (API_KEY:)
-		const authString = XENDIT_API_KEY + ':';
+		const authString = apiKey + ':';
 		const base64Auth = Buffer.from(authString).toString('base64');
 
 		// Call Xendit REST API directly

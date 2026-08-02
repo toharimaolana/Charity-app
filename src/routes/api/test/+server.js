@@ -1,11 +1,12 @@
 import { json } from '@sveltejs/kit';
-import { XENDIT_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export async function GET() {
 	console.log('🧪 Testing environment variables...');
 	
-	const apiKeyExists = !!XENDIT_API_KEY;
-	const apiKeyPrefix = XENDIT_API_KEY?.substring(0, 25) + '...';
+	const apiKey = env.XENDIT_API_KEY;
+	const apiKeyExists = !!apiKey;
+	const apiKeyPrefix = apiKey ? apiKey.substring(0, 25) + '...' : 'NONE';
 	
 	console.log('API Key exists:', apiKeyExists);
 	console.log('API Key prefix:', apiKeyPrefix);
